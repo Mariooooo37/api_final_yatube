@@ -15,6 +15,7 @@ class Base64ImageField(serializers.ImageField):
             ext = file_format.split('/')[-1]
             data = ContentFile(base64.b64decode(img_code), name='temp.' + ext)
         return super().to_internal_value(data)
+# Просто решил добавить, раз у нас есть поле image в модели)
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -71,10 +72,6 @@ class FollowSerializer(serializers.ModelSerializer):
                 message='Вы уже подписаны на этого пользователя'
             )
         ]
-    # Не совсем понял, зачем нам тут надо UniqueTogetherValidator описывать,
-    # если мы в модели Follow указали UniqueConstraint, но без этого pytest
-    # не принимал.Или сериализатор берет из модели только поля, а что в Meta
-    # описанно игнорирует?
 
 
 class CommentSerializer(serializers.ModelSerializer):

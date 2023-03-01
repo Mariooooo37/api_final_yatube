@@ -18,11 +18,6 @@ class PostViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-    def get_permissions(self):
-        if self.action == 'create':
-            return (IsAuthenticated(),)
-        return super().get_permissions()
-
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Group.objects.all()
@@ -44,17 +39,16 @@ class CommentViewSet(viewsets.ModelViewSet):
             author=self.request.user, post=post,
         )
 
-    def get_permissions(self):
-        if self.action == 'create':
-            return (IsAuthenticated(),)
-        return super().get_permissions()
-
 
 class FollowViewSet(mixins.ListModelMixin,
                     mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = FollowSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('following__username',)
+    permission_classes = (IsAuthenticated,)
+    # Привет! Пермишен добавил, но он выглядит излишним, у меня на уровне
+    # проекта стоит пермишен IsAuthenticated. Или лучше на уровне проекта его
+    # не указывать и явно для каждого вьюсета прописывать?
 
     def get_queryset(self):
         user = get_object_or_404(User, pk=self.request.user.id)

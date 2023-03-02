@@ -46,13 +46,10 @@ class FollowViewSet(mixins.ListModelMixin,
     filter_backends = (filters.SearchFilter,)
     search_fields = ('following__username',)
     permission_classes = (IsAuthenticated,)
-    # Привет! Пермишен добавил, но он выглядит излишним, у меня на уровне
-    # проекта стоит пермишен IsAuthenticated. Или лучше на уровне проекта его
-    # не указывать и явно для каждого вьюсета прописывать?
 
     def get_queryset(self):
         user = get_object_or_404(User, pk=self.request.user.id)
-        return user.follower.all()
+        return user.follower
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

@@ -15,7 +15,6 @@ class Base64ImageField(serializers.ImageField):
             ext = file_format.split('/')[-1]
             data = ContentFile(base64.b64decode(img_code), name='temp.' + ext)
         return super().to_internal_value(data)
-# Просто решил добавить, раз у нас есть поле image в модели)
 
 
 class GroupSerializer(serializers.ModelSerializer):
